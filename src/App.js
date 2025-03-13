@@ -3,7 +3,7 @@ import Dropdown from "./Dropdown";
 import "./App.css";
 
 function App() {
-  const sampleOptions = ["Apple", "Banana", "Cherry", "Date"];
+  const sampleOptions = ["Option1", "Option2", "Option3", "Option4"];
 
   return (
     <div className="App">

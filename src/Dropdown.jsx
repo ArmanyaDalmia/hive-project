@@ -7,19 +7,13 @@ const Dropdown = ({ options, multiSelect = false }) => {
     multiSelect ? [] : null
   );
 
-  const handleToggle = () => {
-    setIsOpen(!isOpen);
-  };
-
   const handleSelect = (option) => {
     if (multiSelect) {
-      setSelectedOptions((prevOptions) => {
-        if (prevOptions && prevOptions.includes(option)) {
-          return prevOptions.filter((prevOption) => prevOption !== option);
-        } else {
-          return [...prevOptions, option];
-        }
-      });
+      setSelectedOptions((prevOptions) =>
+        prevOptions.includes(option)
+          ? prevOptions.filter((prevOption) => prevOption !== option)
+          : [...prevOptions, option]
+      );
     } else {
       setSelectedOptions(option);
     }
@@ -27,35 +21,41 @@ const Dropdown = ({ options, multiSelect = false }) => {
 
   const handleSelectAll = () => {
     if (multiSelect) {
-      const allSelected = selectedOptions.length === options.length ? [] : options;
-      setSelectedOptions(allSelected);
+      setSelectedOptions(
+        selectedOptions.length === options.length ? [] : options
+      );
     }
   };
 
+  const getButtonLabel = () => {
+    if (multiSelect) {
+      return selectedOptions?.length > 0
+        ? selectedOptions.join(", ")
+        : "Select Options";
+    }
+    return selectedOptions || "Select an Option";
+  };
+
   return (
-    <div className="dropdown">
-      <button className="dropdown-toggle" onClick={handleToggle}>
-        {multiSelect
-          ? selectedOptions && selectedOptions.length > 0
-            ? selectedOptions.join(", ")
-            : "Select Options"
-          : selectedOptions
-          ? selectedOptions
-          : "Select an Option"}
+    <div className="dropdown-container">
+      <button className="dropdown-button" onClick={() => setIsOpen(!isOpen)}>
+        {getButtonLabel()}
       </button>
       {isOpen && (
-        <ul className="dropdown-menu">
+        <ul className="dropdown-list">
           {multiSelect && (
-            <li
-              onClick={handleSelectAll}
-            >
-              {selectedOptions.length === options.length
+            <li className="select-all" onClick={handleSelectAll}>
+              {selectedOptions?.length === options.length
                 ? "Deselect All"
                 : "Select All"}
             </li>
           )}
           {options.map((option) => (
-            <li key={option} onClick={() => handleSelect(option)}>
+            <li
+              key={option}
+              onClick={() => handleSelect(option)}
+              className={selectedOptions?.includes(option) ? "selected" : ""}
+            >
               {option}
             </li>
           ))}
