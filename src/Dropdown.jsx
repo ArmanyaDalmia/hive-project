@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Dropdown.css";
 
-const Dropdown = ({ options, multiSelect = false }) => {
+const Dropdown = ({ options, multiSelect = false, onSelect = () => {} }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState(
     multiSelect ? [] : null
@@ -14,8 +14,10 @@ const Dropdown = ({ options, multiSelect = false }) => {
           ? prevOptions.filter((prevOption) => prevOption !== option)
           : [...prevOptions, option]
       );
+      onSelect(selectedOptions);
     } else {
       setSelectedOptions(option);
+      onSelect(option);
     }
   };
 
@@ -24,6 +26,7 @@ const Dropdown = ({ options, multiSelect = false }) => {
       setSelectedOptions(
         selectedOptions.length === options.length ? [] : options
       );
+      onSelect(selectedOptions);
     }
   };
 
